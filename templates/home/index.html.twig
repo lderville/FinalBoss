@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+	<br>
+	<br>
+	<br>
+	<br>
+
+
+		<div class="d-block container justify-content-center   ">
+			<div class=" shadow rounded  border border-primary ">
+				<br>
+				{% if app.user %}
+
+
+<span> Filtrer par language</span>
+					<a class="btn btn-danger"  href="{{ path('filter_language', {'language':'isAngular'}) }}" class="link tooltip-link"
+					   data-toggle="tooltip"
+					   data-original-title="Une URL est une adresse web">Angular</a>
+					<a class="btn btn-dark"  href="{{ path('filter_language', {'language':'isSvelte'}) }}" class="link tooltip-link"
+					   data-toggle="tooltip"
+					   data-original-title="Une URL est une adresse web">Svelte</a>
+					<a class="btn btn-success"  href="{{ path('filter_language', {'language':'isSpring'}) }}" class="link tooltip-link"
+					   data-toggle="tooltip"
+					   data-original-title="Une URL est une adresse web">Spring</a>
+					<a class="btn btn-info"  href="{{ path('filter_language', {'language':'isVue'}) }}" class="link tooltip-link"
+					   data-toggle="tooltip"
+					   data-original-title="Une URL est une adresse web">Vue</a>
+
+					<table class="table">
+
+						<tbody>
+
+						{% for user in utilisateurs %}
+						<tr>
+							<th scope="row">{{ user.username }}</th>
+							<td>
+								{% if user.isAngular %}
+									<img class="img-fluid max" src="{{ asset('img/64px-Angular.png') }}" alt="angular">
+								{% endif %}
+								{% if user.isSvelte %}
+									<img class="img-fluid max" src="{{ asset('img/64px-Svelte.png') }}" alt="angular">
+								{% endif %}
+								{% if user.isSpring %}
+									<img class="img-fluid max" src="{{ asset('img/64px-Spring.png') }}" alt="angular">
+								{% endif %}
+								{% if user.isVue %}
+									<img class="img-fluid max" src="{{ asset('img/64px-Vue.png') }}" alt="angular">
+								{% endif %}
+
+							</td>
+
+							<td>
+
+								{% if user.id in array %}
+
+								<a href="{{ path('add_friend', {'id':user.id}) }}"><img
+											src="{{ asset('img/users-slash-solid.svg') }}"
+											alt="un triangle aux trois côtés égaux"
+											height="30px"
+											width="40px" />
+								</a>
+
+								{% endif %}
+
+								{% if not( user.id in array)  %}
+									<a href="{{ path('add_friend', {'id':user.id}) }}"><img
+												src="{{ asset('img/user.svg') }}"
+												alt="un triangle aux trois côtés égaux"
+												height="30px"
+												width="40px" />
+									</a>
+
+
+									{% endif %}
+
+
+
+
+
+								<a href="#"><img
+											src="{{ asset('img/envelope-regular.svg') }}"
+											alt="un triangle aux trois côtés égaux"
+											height="30px"
+											width="40px" />
+								</a>
+
+
+							</td>
+
+						</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+				{% endif %}
+
+
+
+
+	{% if(not app.user) %}
+				<div class="rounded-3 container-sm   ">
+					<h2 class="text-center text-capitalize">Vous devez être authentifié pour voir la liste des
+						développeurs</h2>
+				</div>
+	{% endif %}
+			</div>
+			<small class="text-danger">{{ nbutilisateurs }} utilisateur(s) en base de donnée</small>
+		</div>
+
+
+
+
+
+
+
+{% endblock %}
