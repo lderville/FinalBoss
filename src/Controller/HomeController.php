@@ -22,17 +22,22 @@ class HomeController extends AbstractController
 
 
         $utilisateurs = $userRepository->findAll();
-        unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
+
+        
         $nbUtilisateurs = count($utilisateurs);
         $nbFriends=0;
 
         if (TRUE === $this->isGranted('ROLE_USER')) {
+
+            unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
+            $nbUtilisateurs = count($utilisateurs);
 
             $currentUser = $this->getUser()->getUserIdentifier();
             $idUser = $userRepository->findOneBy(['username'=>$currentUser]);
 
             $friends =$idUser->getFriends();
             $array = array();
+            array_push($array,0);
             foreach ($friends as $fr){
 
                 if($idUser->isFriend($fr)){
@@ -43,6 +48,13 @@ class HomeController extends AbstractController
 
             $nbFriends=count($friends)-1;
 
+            return $this->render('home/index.html.twig',
+                [
+                    'nbutilisateurs'=>$nbUtilisateurs,
+                    'utilisateurs'=>$utilisateurs,
+                    'nbFriends'=>$nbFriends,
+                    'array'=>$array,]);
+
 
         }
 
@@ -51,11 +63,7 @@ class HomeController extends AbstractController
            'nbutilisateurs'=>$nbUtilisateurs,
             'utilisateurs'=>$utilisateurs,
             'nbFriends'=>$nbFriends,
-            'array'=>$array
-
-        ]
-
-        );
+            ]);
     }
 
     #[Route('/filter/{language}', name: 'filter_language')]
@@ -65,8 +73,9 @@ class HomeController extends AbstractController
     ){
 
         $utilisateurs = $userRepository->findBy([$language=>true]);
-        unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
 
+        unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
+        $nbUtilisateurs = count($utilisateurs);
 
 
 
@@ -123,8 +132,8 @@ class HomeController extends AbstractController
             }
 
         }
-        $lesUtilisateur = $userRepository->findAll();
-        $nbUtilisateurs = count($lesUtilisateur);
+
+
 
 
         return $this->render('home/index.html.twig',
@@ -146,9 +155,9 @@ class HomeController extends AbstractController
     ){
 
         $utilisateurs = $userRepository->findAll();
-        $nbUtilisateurs=count($utilisateurs);
-        unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
 
+        unset($utilisateurs[array_search($this->getUser(), $utilisateurs)]);
+        $nbUtilisateurs=count($utilisateurs);
 
         $currentUser = $this->getUser()->getUserIdentifier();
         $idUser = $userRepository->findOneBy(['username'=>$currentUser]);
@@ -165,8 +174,8 @@ class HomeController extends AbstractController
         $friends = $idUser->getFriends();
         $nbFriends=count($friends)-1;
 
-        $lesUtilisateur = $userRepository->findAll();
-        $nbUtilisateurs = count($utilisateurs);
+
+
 
         $friends = $idUser->getFriends();
         $array = array();

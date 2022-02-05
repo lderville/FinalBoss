@@ -1,2 +1,2 @@
 # Database migrations
-./bin/console d:s:u -f
+./bin/console doctrine:migrations:migrate --no-interaction
